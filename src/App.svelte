@@ -20,7 +20,35 @@
 
   async function selectPokemon(url) {
     const response = await axios.get(url);
-    selectedPokemon = response.data;
+    const pokemonData = response.data;
+
+    // Fetch species data for evolution chain
+    const speciesResponse = await axios.get(pokemonData.species.url);
+    const evolutionChainUrl = speciesResponse.data.evolution_chain.url;
+    
+    // Fetch evolution chain
+    const evolutionResponse = await axios.get(evolutionChainUrl);
+    const evolutionChain = evolutionResponse.data.chain;
+
+    // Process evolution chain
+    const evolutions = processEvolutionChain(evolutionChain);
+
+    selectedPokemon = {
+      ...pokemonData,
+      evolutions: evolutions
+    };
+  }
+
+  function processEvolutionChain(chain) {
+    let evolutions = [];
+    let current = chain;
+
+    while (current) {
+      evolutions.push(current.species.name);
+      current = current.evolves_to[0]; // Assumes linear evolution, might need adjustment for branching evolutions
+    }
+
+    return evolutions;
   }
 
   $: paginatedPokemonList = pokemonList.slice(
@@ -69,10 +97,28 @@
             <p>Height: {selectedPokemon.height / 10}m</p>
             <p>Weight: {selectedPokemon.weight / 10}kg</p>
           </div>
+          <h4>Types:</h4>
+          <ul class="types">
+            {#each selectedPokemon.types as type}
+              <li>{type.type.name}</li>
+            {/each}
+          </ul>
           <h4>Abilities:</h4>
-          <ul>
+          <ul class="abilities">
             {#each selectedPokemon.abilities as ability}
               <li>{ability.ability.name}</li>
+            {/each}
+          </ul>
+          <h4>Moves:</h4>
+          <ul class="moves">
+            {#each selectedPokemon.moves.slice(0, 5) as move}
+              <li>{move.move.name}</li>
+            {/each}
+          </ul>
+          <h4>Evolution Chain:</h4>
+          <ul class="evolutions">
+            {#each selectedPokemon.evolutions as evolution}
+              <li>{evolution}</li>
             {/each}
           </ul>
         </div>
@@ -123,41 +169,15 @@
   .pokemon-list {
     flex: 1;
     background-color: #ffcdd2; /* Light pastel red */
-  }
-
-  .pokemon-detail {
-    flex: 2;
-  }
-
-  h2 {
-    text-align: center;
-    margin-bottom: 20px;
-    color: #333;
+    max-height: 600px; /* Set a fixed height */
+    display: flex;
+    flex-direction: column;
   }
 
   .list-container {
-    max-height: 500px;
+    flex: 1;
     overflow-y: auto;
     padding-right: 10px;
-  }
-
-  button {
-    display: block;
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 10px;
-    background-color: #81d4fa; /* Light pastel blue */
-    color: #333;
-    border: none;
-    border-radius: 25px;
-    cursor: pointer;
-    transition: background-color 0.3s, transform 0.2s;
-    text-transform: capitalize;
-  }
-
-  button:hover {
-    background-color: #4fc3f7;
-    transform: translateY(-2px);
   }
 
   .pagination {
@@ -196,6 +216,35 @@
     color: #333;
   }
 
+  .pokemon-detail {
+    flex: 2;
+  }
+
+  h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+  }
+
+  button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #81d4fa; /* Light pastel blue */
+    color: #333;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+    text-transform: capitalize;
+  }
+
+  button:hover {
+    background-color: #4fc3f7;
+    transform: translateY(-2px);
+  }
+
   .detail-container {
     text-align: center;
   }
@@ -226,20 +275,36 @@
     color: #333;
   }
 
-  ul {
+  .types, .abilities, .moves, .evolutions {
     list-style-type: none;
     padding: 0;
-    margin-top: 20px;
+    margin-top: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 5px;
   }
 
-  li {
+  .types li, .abilities li, .moves li, .evolutions li {
     background-color: #a5d6a7; /* Light pastel green */
     color: #333;
-    margin-bottom: 5px;
     padding: 5px 10px;
     border-radius: 15px;
     display: inline-block;
     margin-right: 5px;
+    margin-bottom: 5px;
+  }
+
+  .types li {
+    background-color: #ffab91; /* Light pastel orange for types */
+  }
+
+  .moves li {
+    background-color: #90caf9; /* Light pastel blue for moves */
+  }
+
+  .evolutions li {
+    background-color: #f48fb1; /* Light pastel pink for evolutions */
   }
 
   .select-prompt {
