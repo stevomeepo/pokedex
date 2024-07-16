@@ -60,6 +60,7 @@
     </div>
     <div class="pokemon-detail">
       <h2>Pokémon Details</h2>
+      {#if selectedPokemon}
         <div class="detail-container">
           <h3>{selectedPokemon.name}</h3>
           <img src={selectedPokemon.sprites.front_default} alt={selectedPokemon.name} />
