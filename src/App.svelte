@@ -13,7 +13,7 @@
   });
 
   async function fetchPokemons() {
-    const response = await axios.get('https://pokeapi.co/api/v2/pokemon?limit=100');
+    const response = await axios.get('https://pokeapi.co/api/v2/pokemon?limit=1025');
     pokemonList = response.data.results;
     totalPokemons = pokemonList.length;
   }
