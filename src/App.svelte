@@ -43,6 +43,7 @@
     <div class="pokemon-list">
       <h2>Pokémon List</h2>
       <div class="list-container">
+        {#each paginatedPokemonList as pokemon}
           <button on:click={() => selectPokemon(pokemon.url)}>
             {pokemon.name}
           </button>
