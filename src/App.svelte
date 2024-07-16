@@ -70,6 +70,7 @@
           </div>
           <h4>Abilities:</h4>
           <ul>
+            {#each selectedPokemon.abilities as ability}
               <li>{ability.ability.name}</li>
             {/each}
           </ul>
@@ -84,7 +85,7 @@
 <style>
   :global(body) {
     font-family: 'Roboto', sans-serif;
-    background-color: #fff9c4;
+    background-color: #fff9c4; /* Light pastel yellow */
     margin: 0;
     padding: 0;
     color: #333;
@@ -112,7 +113,7 @@
   }
 
   .pokemon-list, .pokemon-detail {
-    background-color: #fffde7;
+    background-color: #fffde7; /* Even lighter yellow */
     border-radius: 15px;
     padding: 20px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -120,7 +121,7 @@
 
   .pokemon-list {
     flex: 1;
-    background-color: #ffcdd2;
+    background-color: #ffcdd2; /* Light pastel red */
   }
 
   .pokemon-detail {
@@ -144,7 +145,7 @@
     width: 100%;
     padding: 10px;
     margin-bottom: 10px;
-    background-color: #81d4fa;
+    background-color: #81d4fa; /* Light pastel blue */
     color: #333;
     border: none;
     border-radius: 25px;
