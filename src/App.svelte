@@ -43,7 +43,6 @@
     <div class="pokemon-list">
       <h2>Pokémon List</h2>
       <div class="list-container">
-        {#each paginatedPokemonList as pokemon}
           <button on:click={() => selectPokemon(pokemon.url)}>
             {pokemon.name}
           </button>
@@ -61,7 +60,6 @@
     </div>
     <div class="pokemon-detail">
       <h2>Pokémon Details</h2>
-      {#if selectedPokemon}
         <div class="detail-container">
           <h3>{selectedPokemon.name}</h3>
           <img src={selectedPokemon.sprites.front_default} alt={selectedPokemon.name} />
@@ -71,7 +69,6 @@
           </div>
           <h4>Abilities:</h4>
           <ul>
-            {#each selectedPokemon.abilities as ability}
               <li>{ability.ability.name}</li>
             {/each}
           </ul>
@@ -86,7 +83,7 @@
 <style>
   :global(body) {
     font-family: 'Roboto', sans-serif;
-    background-color: #fff9c4; /* Light pastel yellow */
+    background-color: #fff9c4;
     margin: 0;
     padding: 0;
     color: #333;
@@ -114,7 +111,7 @@
   }
 
   .pokemon-list, .pokemon-detail {
-    background-color: #fffde7; /* Even lighter yellow */
+    background-color: #fffde7;
     border-radius: 15px;
     padding: 20px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -122,7 +119,7 @@
 
   .pokemon-list {
     flex: 1;
-    background-color: #ffcdd2; /* Light pastel red */
+    background-color: #ffcdd2;
   }
 
   .pokemon-detail {
@@ -146,7 +143,7 @@
     width: 100%;
     padding: 10px;
     margin-bottom: 10px;
-    background-color: #81d4fa; /* Light pastel blue */
+    background-color: #81d4fa;
     color: #333;
     border: none;
     border-radius: 25px;
